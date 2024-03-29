@@ -13,7 +13,7 @@ export default class Dialog extends Controller {
   }
 
   initialize() {
-    this.close = this.close.bind(this)
+    this.forceClose = this.forceClose.bind(this)
   }
 
   connect(): void {
@@ -21,11 +21,11 @@ export default class Dialog extends Controller {
       this.open()
     }
 
-    document.addEventListener("turbo:before-cache", this.close)
+    document.addEventListener("turbo:before-render", this.forceClose)
   }
 
   disconnect(): void {
-    document.removeEventListener("turbo:before-cache", this.close)
+    document.removeEventListener("turbo:before-render", this.forceClose)
   }
 
   open(): void {
@@ -45,5 +45,9 @@ export default class Dialog extends Controller {
     if ((event.target as HTMLElement) === this.dialogTarget) {
       this.close()
     }
+  }
+
+  forceClose(): void {
+    this.dialogTarget.close()
   }
 }
